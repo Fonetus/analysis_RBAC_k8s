@@ -1,0 +1,77 @@
+	УРОВЕНЬ CRITICAL
+- уровень, при котором существуют уязвимости, способных привести к серьезным последствиям для безопасности и доступности кластера.
+
+1. Несанкционированный доступ к учетным данным
+   Правила: risky-read-secrets; risky-modify-secrets
+   Опасность: 
+  - get/list/watch: возможность просмотреть список всех секретов в конкретном пространстве имен
+  - create/update/patch/delete: подмена конфиденциальных данных, нарушение работы нагрузок
+
+2. Прямая эскалация привилегий
+   Правила: risky-escalate-roles; risky-escalate-clusterroles; risky-any-verb-roles; risky-any-verb-clusterroles
+   Опасность: глагол escalate и * нарушает принцип наименьших привилегий. Возможность наследовать права удаленного пользователя, если не удалить неиспользуемые привязки ролей; создавать роли с произвольными, в том числе высокопривилегированными, правами в любом namespace или кластере.
+
+3. Исполнение произвольного кода и атака Node Escape
+   Правила: risky-create-pods; risky-create-jobs; risky-create-daemonsets; risky-update-daemonsets; risky-create-pods-subresources; risky-execute-command-node-proxy
+   Опасность: 
+  - create для pods:  кража токена сервисного аккаунта, несанкционированное взаимодействие между подами
+  - create для jobs: эксплуатация для выполнения вредоносного кода
+  - create/update для daemonsets: возможность изменить существующий DaemonSet, утечка информации о конфигурации
+  - create для pods/exec и pods/attach: возможность получения интерактивной оболочки или подключения к уже запущенным процессам внутри контейнера
+  - create/get для nodes/proxy: доступ к API kubelet и выполнение произвольных команд
+
+4. DDoS-атаки
+   Правила: risky-any-resource-delete; risky-any-resource-deletecollection
+   Опасность: неконтролируемое использование глаголов delete и deletecollection может нарушить целостность данных, нарушить работу сервисом, а также привести к утечке ресурсов
+
+5. RBAC Hijacking
+   Правила: risky-modify-rolebindings; risky-modify-clusterrolebindings
+   Опасность: 
+  - create/update/patch/delete: риск кражи токенов сервисных аккаунтов, если эти операции выполняются с повышенными привилегиями, то можно получить доступ к конфиденциальным данным, которые не должны быть доступны подам, а также присвоить права другого пользователя внутри контейнера
+
+6. Impersonation
+   Правила: risky-any-verb-users-groups; risky-any-resource-impersonate
+   Опасность: глагол impersonate или * для ресурсов users, groups или * позволяет выполнять любые запросы к API-серверу от имени другого пользователя
+   
+7. Активная разведка системы безопасности
+   Правила: risky-list-resources; risky-get-resources
+   Опасность: использование глаголов list/get для serviceaccounts, clusterrolebindings, rolebindings дает возможность узнать ресурсы в кластере, включая потенциально конфиденциальные
+
+
+	УРОВЕНЬ HIGH
+- уровень, при котором уязвимости представляют серьезную угрозу, но их последствия менее катастрофичны, чем у уровня CRITICAL
+
+1. Косвенное создание / модификация подов
+   Правила: risky-create-deployments; risky-update-deployments; risky-patch-deployments; risky-delete-deployments; risky-create-statefulsets; risky-update-statefulsets; risky-patch-statefulsets; risky-delete-statefulsets; risky-create-replicasets; risky-update-replicasets; risky-create-replicationcontrollers; risky-update-replicationcontrollers; risky-patch-replicationcontrollers; risky-delete-replicationcontrollers; risky-update-jobs; risky-patch-jobs; risky-delete-jobs; risky-create-cronjobs; risky-update-cronjobs; risky-patch-cronjobs; risky-delete-cronjobs
+   Опасность: возможность нарушения ожидаемого состояния приложения. Если у пользователя или процесса есть права на создание, обновление или удаление deployments, statefulsets, replicasets, replicationcontrollers, jobs, cronjobs, то злоумышленник с высокой вероятностью сможет использовать их для повышения своих привилегий в кластере.
+
+2. Сложные цепочки эскалации привилегий через RBAC
+   Правила: risky-create-rolebinding-role; risky-create-rolebinding-clusterrole; risky-create-clusterrolebinding-clusterrole; risky-any-resource-bind
+   Опасность: возможность атакующему обходить изоляцию, получая доступ к критически важным ресурсам, последовательно повышать привилегии через различные векторы
+
+3. Удаление привязок
+   Правила: risky-delete-clusterrolebindings
+   Опасность: использование глагола delete/deletecollection для clusterrolebindings может привести к нарушению работы критически важных рабочих нагрузок, сбоям в работе системы и, как следствие, к утечкам ресурсов или компрометации данных
+
+4. Манипуляция Groups
+   Правила: risky-create-groups; risky-update-groups
+   Опасность: в системах с внешней аутентификацией создание и изменение группы может быть использовано атакующим для добавления себя в привилегированную группу
+
+5. Исполнение произвольного кода
+   Правила: risky-get-pods; risky-exec-pods; risky-attach-pods
+   Опасность: возможность злоумышленнику узнать имя целевого пода, а также полный достпу к оболочке любого пода
+
+6. Активная разведка системы безопасности
+   Правила: risky-list-resources; risky-get-clusterrolebindings
+   Опасность: возможность узнать и прочитать метаданные привязок
+
+	УРОВЕНЬ LOW
+- уровень, при котором атака может быть предотвращена простой настройкой или изменением поведения
+
+1. Пассивная разведка рабочих нагрузок
+   Правила: risky-read-pods
+   Опасность: позволяет считывать состояние пода, получать список его ресурсов или наблюдать за ним в реальном времени
+
+2. DoS
+   Правила: risky-change-replicationcontrollers
+   Опасность: возможность изменить количество реплик, что вызовет временный DoS приложения, однако не удалит его конфигурацию или данные
