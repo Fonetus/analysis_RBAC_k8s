@@ -1,0 +1,165 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: test-user-role
+  namespace: default
+rules:
+- apiGroups: ["*"]
+  resources: ["daemonsets", "jobs", "cronjobs"]
+  verbs: ["get", "list", "delete"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: test-user-role-binding
+  namespace: default
+subjects:
+- kind: User
+  name: test-user-rb
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: test-user-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-user-cluster-role
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments/scale", "statefulsets/scale", "replicationcontrollers"]
+  verbs: ["get", "update", "patch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-user-cluster-role-binding
+subjects:
+- kind: User
+  name: test-user-crb
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: test-user-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: test-group-role
+  namespace: default
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: test-group-role-binding
+  namespace: default
+subjects:
+- kind: Group
+  name: test-group-rb
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: test-group-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-group-cluster-role
+rules:
+- apiGroups: ["", "apps", "extensions", "batch"]
+  resources: ["pods", "deployments", "statefulsets", "daemonsets", "replicasets", "jobs", "cronjobs"]
+  verbs: ["create", "patch", "update"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-group-cluster-role-binding
+subjects:
+- kind: Group
+  name: test-group-crb
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: test-group-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: test-service-account-role
+  namespace: production
+rules:
+- apiGroups: ["", "*"]
+  resources: ["secrets"]
+  verbs: ["get", "list"]
+- apiGroups: ["*"]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups: ["*"]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: test-service-account-role-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: test-service-account-rb
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: test-service-account-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-service-account-cluster-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "configmaps", "deployments"]
+  verbs: ["get", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-service-account-cluster-role-binding
+subjects:
+- kind: ServiceAccount
+  name: test-service-account-crb
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: test-service-account-cluster-role
+  apiGroup: rbac.authorization.k8s.io

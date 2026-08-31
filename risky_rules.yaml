@@ -1,0 +1,495 @@
+######################### START CRITICAL Roles #########################
+
+items:
+
+- metadata:
+    name: risky-read-secrets
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*", ""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
+
+- metadata:
+    name: risky-modify-secrets
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*", ""]
+    resources: ["secrets"]
+    verbs: ["create", "update", "patch", "delete"]
+
+- metadata:
+    name: risky-escalate-roles
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles"]
+    verbs: ["escalate"]
+
+- metadata:
+    name: risky-escalate-clusterroles
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles"]
+    verbs: ["escalate"]
+
+- metadata:
+    name: risky-any-verb-roles
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["roles"]
+    verbs: ["*"]
+
+- metadata:
+    name: risky-any-verb-clusterroles
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["clusterroles"]
+    verbs: ["*"]
+
+- metadata:
+    name: risky-create-pods
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["pods"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-create-jobs
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["jobs"]
+    verbs: ["create"]
+
+- kind: ClusterRole
+  metadata:
+    name: risky-create-daemonsets
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["daemonsets"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-update-daemonsets
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["daemonsets"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-create-pods-subresources
+    priority: CRITICAL
+  rules:
+  - apiGroups: [""]
+    resources: ["pods/exec", "pods/attach"]
+    verbs: ["create"]
+
+- kind: ClusterRole
+  metadata:
+    name: risky-execute-command-node-proxy
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["nodes/proxy"]
+    verbs: ["get", "create"]
+
+- kind: Role
+  metadata:
+    name: risky-execute-command-node-proxy
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["nodes/proxy"]
+    verbs: ["get", "create"]
+
+- metadata:
+    name: risky-any-resource-delete
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["delete"]
+
+- metadata:
+    name: risky-any-resource-deletecollection
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["deletecollection"]
+
+- metadata:
+    name: risky-modify-rolebindings
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["rolebindings"]
+    verbs: ["create", "update", "delete", "patch"]
+
+- metadata:
+    name: risky-modify-clusterrolebindings
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["clusterrolebindings"]
+    verbs: ["create", "update", "patch"]
+
+- kind: ClusterRole
+  metadata:
+    name: risky-any-verb-users-groups
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["users", "groups"]
+    verbs: ["*"]
+
+- metadata:
+    name: risky-any-resource-impersonate
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["impersonate"]
+
+- kind: ClusterRole
+  metadata:
+    name: risky-list-resources
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["serviceaccounts", "clusterrolebindings", "rolebindings"]
+    verbs: ["list"]
+
+- kind: ClusterRole
+  metadata:
+    name: risky-get-resources
+    priority: CRITICAL
+  rules:
+  - apiGroups: ["*"]
+    resources: ["clusterrolebindings", "rolebindings", "serviceaccounts"]
+    verbs: ["get"]
+
+######################### END CRITICAL Roles #########################
+
+######################### START HIGH Roles #########################
+
+- metadata:
+    name: risky-create-deployments
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["deployments"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-update-deployments
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["deployments"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-patch-deployments
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["deployments"]
+    verbs: ["patch"]
+
+- metadata:
+    name: risky-delete-deployments
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["deployments"]
+    verbs: ["delete"]
+
+- metadata:
+    name: risky-create-statefulsets
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["statefulsets", "statefulsets/scale"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-update-statefulsets
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["statefulsets"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-patch-statefulsets
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["statefulsets"]
+    verbs: ["patch"]
+
+- metadata:
+    name: risky-delete-statefulsets
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["statefulsets"]
+    verbs: ["delete"]
+
+- metadata:
+    name: risky-create-replicasets
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicasets"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-update-replicasets
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicasets"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-create-replicationcontrollers
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicationcontrollers"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-update-replicationcontrollers
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicationcontrollers"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-patch-replicationcontrollers
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicationcontrollers"]
+    verbs: ["patch"]
+
+- metadata:
+    name: risky-delete-replicationcontrollers
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicationcontrollers"]
+    verbs: ["delete"]
+
+- metadata:
+    name: risky-update-jobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["jobs"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-patch-jobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["jobs"]
+    verbs: ["patch"]
+
+- metadata:
+    name: risky-delete-jobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["jobs"]
+    verbs: ["delete"]
+
+- metadata:
+    name: risky-create-cronjobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["cronjobs"]
+    verbs: ["create"]
+
+- metadata:
+    name: risky-update-cronjobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["cronjobs"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-patch-cronjobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["cronjobs"]
+    verbs: ["patch"]
+
+- metadata:
+    name: risky-delete-cronjobs
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["cronjobs"]
+    verbs: ["delete"]
+
+- kind: Role
+  metadata:
+    name: risky-create-rolebinding-role
+    priority: HIGH
+  rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["rolebindings"]
+    verbs: ["create"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles"]
+    verbs: ["bind"]
+    resourceNames: ["*"]
+
+- kind: Role
+  metadata:
+    name: risky-create-rolebinding-clusterrole
+    priority: HIGH
+  rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["rolebindings"]
+    verbs: ["create"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles"]
+    verbs: ["bind"]
+    resourceNames: ["*"]
+
+- kind: Role
+  metadata:
+    name: risky-create-clusterrolebinding-clusterrole
+    priority: HIGH
+  rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterrolebindings"]
+    verbs: ["create"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles"]
+    verbs: ["bind"]
+    resourceNames: ["*"]
+
+- metadata:
+    name: risky-any-resource-bind
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["bind"]
+
+- metadata:
+    name: risky-delete-clusterrolebindings
+    priority: HIGH
+  rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterrolebindings"]
+    verbs: ["delete", "deletecollection"]
+
+- metadata:
+    name: risky-create-groups
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["groups"]
+    verbs: ["create"]
+
+- kind: ClusterRole
+  metadata:
+    name: risky-update-groups
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["groups"]
+    verbs: ["update"]
+
+- metadata:
+    name: risky-get-pods
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["pods/exec", "pods/attach"]
+    verbs: ["get"]
+
+- kind: Role
+  metadata:
+    name: risky-exec-pods
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+  - apiGroups: ["*"]
+    resources: ["pods"]
+    verbs: ["get"]
+
+- kind: Role
+  metadata:
+    name: risky-attach-pods
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["pods/attach"]
+    verbs: ["create"]
+  - apiGroups: ["*"]
+    resources: ["pods"]
+    verbs: ["get"]
+
+- kind: Role
+  metadata:
+    name: risky-list-resources
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["serviceaccounts", "rolebindings"]
+    verbs: ["list"]
+
+- kind: Role
+  metadata:
+    name: risky-get-clusterrolebindings
+    priority: HIGH
+  rules:
+  - apiGroups: ["*"]
+    resources: ["clusterrolebindings"]
+    verbs: ["get"]
+
+######################### END HIGH Roles #########################
+
+######################### START LOW Roles #########################
+
+- kind: Role
+  metadata:
+    name: risky-read-pods
+    priority: LOW
+  rules:
+  - apiGroups: ["*"]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+
+- kind: Role
+  metadata:
+    name: risky-change-replicationcontrollers
+    priority: LOW
+  rules:
+  - apiGroups: ["*"]
+    resources: ["replicationcontrollers/scale"]
+    verbs: ["get", "update", "patch"]
+
+######################### END LOW Roles #########################
