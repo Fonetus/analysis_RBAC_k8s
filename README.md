@@ -12,3 +12,5 @@
 ``` python 
 python rbac_main.py --source <api|file> [--file <path>] [--dangerous]
 ```
+_Аргументы командной строки_
+- --source - источник данных: ```api```
