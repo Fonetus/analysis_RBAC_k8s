@@ -9,5 +9,6 @@
 - возможность выводить все права или только опасные
 
 Использование:
-```python 
+``` python 
+python rbac_main.py --source <api|file> [--file <path>] [--dangerous]
 ```
